@@ -162,6 +162,21 @@ def print_model_result_line(
         result.execution_time)
 
 
+def print_analysis_result_line(
+    result, description: str, index: int, total: int
+) -> None:
+    info, status, logger_fn = get_printable_result(
+        result, 'created', 'creating')
+
+    print_fancy_output_line(
+        "{info} {description}".format(info=info, description=description),
+        status,
+        logger_fn,
+        index,
+        total,
+        result.execution_time)
+
+
 def print_snapshot_result_line(
     result, description: str, index: int, total: int
 ) -> None:

@@ -11,6 +11,7 @@ from pathlib import Path
 import dbt.version
 import dbt.flags as flags
 import dbt.task.run as run_task
+import dbt.task.analyze as analyze_task
 import dbt.task.compile as compile_task
 import dbt.task.debug as debug_task
 import dbt.task.clean as clean_task
@@ -480,6 +481,20 @@ def _build_run_subparser(subparsers, base_subparser):
 
     run_sub.set_defaults(cls=run_task.RunTask, which='run', rpc_method='run')
     return run_sub
+
+
+def _build_analyze_subparser(subparsers, base_subparser):
+    sub = subparsers.add_parser(
+        'analyze',
+        parents=[base_subparser],
+        help='''
+        Compiles analyses and executes against the current target database,
+        returning a csv of results to the analysis/ directory.
+        '''
+    )
+    sub.set_defaults(cls=analyze_task.AnalyzeTask, which='analyze',
+                     rpc_method='analyze')
+    return sub
 
 
 def _build_compile_subparser(subparsers, base_subparser):
@@ -1023,18 +1038,19 @@ def parse_args(args, cls=DBTArgumentParser):
     snapshot_sub = _build_snapshot_subparser(subs, base_subparser)
     rpc_sub = _build_rpc_subparser(subs, base_subparser)
     run_sub = _build_run_subparser(subs, base_subparser)
+    analyze_sub = _build_analyze_subparser(subs, base_subparser)
     compile_sub = _build_compile_subparser(subs, base_subparser)
     parse_sub = _build_parse_subparser(subs, base_subparser)
     generate_sub = _build_docs_generate_subparser(docs_subs, base_subparser)
     test_sub = _build_test_subparser(subs, base_subparser)
     seed_sub = _build_seed_subparser(subs, base_subparser)
     # --threads, --no-version-check
-    _add_common_arguments(run_sub, compile_sub, generate_sub, test_sub,
-                          rpc_sub, seed_sub, parse_sub)
+    _add_common_arguments(run_sub, analyze_sub, compile_sub, generate_sub, 
+                          test_sub, rpc_sub, seed_sub, parse_sub)
     # --models, --exclude
     # list_sub sets up its own arguments.
     _add_selection_arguments(run_sub, compile_sub, generate_sub, test_sub)
-    _add_selection_arguments(snapshot_sub, seed_sub, models_name='select')
+    _add_selection_arguments(analyze_sub, snapshot_sub, seed_sub, models_name='select')
     # --defer
     _add_defer_argument(run_sub, test_sub)
     # --full-refresh
