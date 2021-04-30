@@ -48,14 +48,14 @@ RETRYABLE_ERRORS = (
 
 
 @lru_cache()
-def get_bigquery_defaults() -> Tuple[Any, Optional[str]]:
+def get_bigquery_defaults(scopes=None) -> Tuple[Any, Optional[str]]:
     """
     Returns (credentials, project_id)
 
     project_id is returned available from the environment; otherwise None
     """
     # Cached, because the underlying implementation shells out, taking ~1s
-    return google.auth.default()
+    return google.auth.default(scopes=scopes)
 
 
 class Priority(StrEnum):
@@ -112,15 +112,17 @@ class BigQueryCredentials(Credentials):
         return ('method', 'database', 'schema', 'location', 'priority',
                 'timeout_seconds', 'maximum_bytes_billed')
 
-    def __post_init__(self):
+    @classmethod
+    def __pre_deserialize__(cls, d: Dict[Any, Any]) -> Dict[Any, Any]:
         # We need to inject the correct value of the database (aka project) at
         # this stage, ref
         # https://github.com/fishtown-analytics/dbt/pull/2908#discussion_r532927436.
 
         # `database` is an alias of `project` in BigQuery
-        if self.database is None:
+        if 'database' not in d:
             _, database = get_bigquery_defaults()
-            self.database = database
+            d['database'] = database
+        return d
 
 
 class BigQueryConnectionManager(BaseConnectionManager):
@@ -201,7 +203,7 @@ class BigQueryConnectionManager(BaseConnectionManager):
         creds = GoogleServiceAccountCredentials.Credentials
 
         if method == BigQueryConnectionMethod.OAUTH:
-            credentials, _ = get_bigquery_defaults()
+            credentials, _ = get_bigquery_defaults(scopes=cls.SCOPE)
             return credentials
 
         elif method == BigQueryConnectionMethod.SERVICE_ACCOUNT:

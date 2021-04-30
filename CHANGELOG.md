@@ -1,8 +1,29 @@
-## dbt 0.19.1 (Release TBD)
+## dbt 0.19.2 (Release TBD)
+
+## dbt 0.19.2rc1 (April 28, 2021)
+
+
+### Fixes
+- Ensure that schema test macros are properly processed ([#3229](https://github.com/fishtown-analytics/dbt/issues/3229), [#3272](https://github.com/fishtown-analytics/dbt/pull/3272))
+- Fix regression for default project/database for BigQuery connections ([#3218](https://github.com/fishtown-analytics/dbt/issues/3218), [#3305](https://github.com/fishtown-analytics/dbt/pull/3305))
+
+## dbt 0.19.1 (March 31, 2021)
+
+## dbt 0.19.1rc2 (March 25, 2021)
+
+
+### Fixes
+- Pass service-account scopes to gcloud-based oauth ([#3040](https://github.com/fishtown-analytics/dbt/issues/3040), [#3041](https://github.com/fishtown-analytics/dbt/pull/3041))
+
+Contributors:
+- [@yu-iskw](https://github.com/yu-iskw) ([#3041](https://github.com/fishtown-analytics/dbt/pull/3041))
+
+## dbt 0.19.1rc1 (March 15, 2021)
 
 ### Under the hood
 - Update code to use Mashumaro 2.0 ([#3138](https://github.com/fishtown-analytics/dbt/pull/3138))
 - Pin `agate<1.6.2` to avoid installation errors relating to its new dependency `PyICU` ([#3160](https://github.com/fishtown-analytics/dbt/issues/3160), [#3161](https://github.com/fishtown-analytics/dbt/pull/3161))
+- Add an event to track resource counts ([#3050](https://github.com/fishtown-analytics/dbt/issues/3050), [#3157](https://github.com/fishtown-analytics/dbt/pull/3157))
 
 ### Fixes
 
@@ -19,8 +40,6 @@
 ### Under the hood
 - Bump werkzeug upper bound dependency to `<v2.0` ([#3011](https://github.com/fishtown-analytics/dbt/pull/3011))
 - Performance fixes for many different things ([#2862](https://github.com/fishtown-analytics/dbt/issues/2862), [#3034](https://github.com/fishtown-analytics/dbt/pull/3034))
-- Update code to use Mashumaro 2.0 ([#3138](https://github.com/fishtown-analytics/dbt/pull/3138))
-- Add an event to track resource counts ([#3050](https://github.com/fishtown-analytics/dbt/issues/3050), [#3156](https://github.com/fishtown-analytics/dbt/pull/3156))
 
 Contributors:
 - [@Bl3f](https://github.com/Bl3f) ([#3011](https://github.com/fishtown-analytics/dbt/pull/3011))

@@ -318,7 +318,7 @@ class UnitBuilder(PytestBuilder):
 
 class Flake8Builder(ArgBuilder):
     def add_test_environment_args(self):
-        self.args.extend(['flake8', '--select', 'E,W,F', '--ignore', 'W504'])
+        self.args.extend(['flake8', '--select', 'E,W,F', '--ignore', 'W504', '--max-line-length', '99'])
         start = len(self.args)
         self.args.extend(self.parsed.flake8_args)
         if len(self.args) == start:
